@@ -82,6 +82,7 @@ def chat(input: ChatInput, db: Session = Depends(get_db)):
             {"role": "system", "content": f"Context data:\n\n{context}"}
         ]
 
+        print('context messages:', context)
     # Always append chat history (from DB)
     messages += [
         {"role": m.role, "content": m.content} if m.role != "function" else
