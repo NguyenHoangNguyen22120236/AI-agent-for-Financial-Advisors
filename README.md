@@ -20,13 +20,13 @@ AI-agent-for-Financial-Advisors/
 │   ├── app/
 │   ├── alembic/
 │   ├── requirements.txt
+|   ├── docker-compose.yml
 │   └── .env
 ├── frontend/
 │   ├── src/
 │   ├── public/
 │   ├── package.json
 │   └── .env
-├── docker-compose.yml
 └── README.md
 ```
 
