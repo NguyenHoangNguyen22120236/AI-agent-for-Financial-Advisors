@@ -1,0 +1,12 @@
+.venv/
+.env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
