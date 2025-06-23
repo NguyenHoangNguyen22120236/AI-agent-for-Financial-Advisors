@@ -11,4 +11,5 @@ develop-eggs/
 dist/
 downloads/
 
+# Ignore Dockerfile
 Dockerfile
