@@ -1,0 +1,53 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, #f6f7fb 0%, #e3ebfa 100%);
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 44px 38px 36px;
+  box-shadow: 0 8px 32px rgba(90,100,140,0.08);
+  text-align: center;
+  max-width: 380px;
+}
+
+.highlight {
+  color: #1967d2;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0 0 22px 0;
+  color: #555;
+  font-size: 1.04em;
+}
+
+.oauth-btn {
+  background: linear-gradient(90deg, #1a73e8 0%, #4285f4 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.13em;
+  border: none;
+  border-radius: 8px;
+  padding: 13px 0;
+  width: 100%;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.oauth-btn:hover {
+  background: linear-gradient(90deg, #1865c0 0%, #357ae8 100%);
+}
+
+.google-icon {
+  font-size: 1.3em;
+}

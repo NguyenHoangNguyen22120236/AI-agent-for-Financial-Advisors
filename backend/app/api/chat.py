@@ -26,9 +26,10 @@ chat_router = APIRouter(prefix="/chat", tags=["Chat"])
 
 @chat_router.post("/")
 def chat(input: ChatInput, db: Session = Depends(get_db)):
+    print("Received chat input:", input)
     user_id = input.user_id
     user_message = input.message
-    session_id = getattr(input, "session_id", None)
+    session_id = input.session_id
 
     # 1. Find or create chat session
     session = None

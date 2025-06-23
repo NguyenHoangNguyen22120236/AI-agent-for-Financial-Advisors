@@ -1,0 +1,67 @@
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background-color: #1e1e2f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.sidebar-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: auto;
+}
+
+.sidebar-nav a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav .active {
+  background-color: #2a2a40;
+  color: white;
+}
+
+.connect-hubspot-warning {
+  background-color: #fffae6;
+  color: #8a6d3b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.connect-button {
+  margin-top: 0.5rem;
+  background-color: #ff8c00;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button {
+  margin-top: 2rem;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}

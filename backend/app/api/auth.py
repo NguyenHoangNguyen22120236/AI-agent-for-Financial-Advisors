@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, BackgroundTasks
 from app.services.google_oauth import get_auth_url, get_flow
 from app.services.hubspot_oauth import get_hubspot_auth_url
 from app.models.user import User
@@ -6,11 +6,32 @@ from app.db.session import get_db
 from sqlalchemy.orm import Session
 import os
 import requests
-from fastapi import BackgroundTasks
 from app.services.email import sync_gmail_emails
 from app.services.hubspot import sync_hubspot_data
+from sqlalchemy.orm import Session
+from fastapi.responses import JSONResponse
+from app.utils.jwt import create_access_token, decode_access_token
+from fastapi.responses import RedirectResponse
+
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 auth_router = APIRouter(prefix="/auth", tags=["Auth"])
+
+from fastapi import Header, HTTPException, Depends
+
+def get_current_user(authorization: str = Header(...)):
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid auth header")
+    
+    token = authorization.split(" ")[1]
+    payload = decode_access_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    return payload["sub"]  # return email
 
 
 @auth_router.get("/google/login")
@@ -33,11 +54,14 @@ def google_callback(request: Request, db: Session = Depends(get_db), background_
     email = id_info["email"]
     user = User.get_or_create(db, email=email)
     user.update_google_tokens(db, credentials.token, credentials.refresh_token)
-    
-    # Run Gmail sync in background
+
+    # Create JWT
+    token = create_access_token({"sub": email})
     background_tasks.add_task(sync_gmail_emails, user, db)
 
-    return {"message": f"Google account connected for {email}"}
+    # Redirect to frontend with token in query param
+    frontend_url = os.getenv("FRONTEND_URL")
+    return RedirectResponse(url=f"{frontend_url}/auth/callback?token={token}")
 
 
 @auth_router.get("/hubspot/login")
@@ -82,5 +106,26 @@ def hubspot_callback(request: Request, db: Session = Depends(get_db), background
 
     # 4. Optionally, sync HubSpot data here if needed
     background_tasks.add_task(sync_hubspot_data, user, db)
-    return {"message": f"HubSpot connected for {email}"}
+    frontend_url = os.getenv("FRONTEND_URL")
+    return RedirectResponse(url=f"{frontend_url}")
 
+
+@auth_router.get("/me")
+def get_me(user_email: str = Depends(get_current_user), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == user_email).first()
+    if not user:
+        return {"user": None}
+
+    return {
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "hubspot_connected": user.hubspot_access_token is not None,
+        }
+    }
+
+
+@auth_router.post("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return {"detail": "Logged out"}
